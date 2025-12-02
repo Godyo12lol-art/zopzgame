@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tic Tac Toe</title>
+<style>
+  body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('back1.jpg');
+    background-size: cover;
+    background-position: center;
+    font-family: Arial, sans-serif;
+    color: white;
+    transition: background-image 0.3s ease;
+  }
+
+  .game {
+    text-align: center;
+    background: rgba(0,0,0,0.5);
+    padding: 20px;
+    border-radius: 12px;
+    backdrop-filter: blur(4px);
+  }
+
+  #board {
+    display: grid;
+    grid-template-columns: repeat(3, 120px);
+    grid-template-rows: repeat(3, 120px);
+    gap: 8px;
+    margin: 20px auto;
+  }
+
+  .cell {
+    width: 120px;
+    height: 120px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 80px;
+    font-weight: bold;
+    color: white;
+    transition: background 0.2s;
+  }
+
+  .cell:hover {
+    background: rgba(255,255,255,0.1);
+  }
+
+  .x-mark {
+    width: 70%;
+    height: 70%;
+    background: red;
+    border-radius: 6px;
+  }
+
+  .o-mark {
+    width: 70%;
+    height: 70%;
+    background: orange;
+    border-radius: 50%;
+  }
+
+  button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 6px;
+    background: #333;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  button:hover { background: #444; }
+
+  #status {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<div class="game">
+  <h1>Tic Tac Toe</h1>
+  <div id="board"></div>
+  <div id="status">Turn: X</div>
+  <button onclick="restart()">Restart</button>
+  <button onclick="toggleBackground()">Toggle Background</button>
+</div>
+
+<script>
+  const boardEl = document.getElementById('board');
+  const statusEl = document.getElementById('status');
+  const bodyEl = document.body;
+
+  let board = Array(9).fill(null);
+  let current = 'X';
+  let playing = true;
+
+  const wins = [
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6]
+  ];
+
+  // Images are now in same folder
+  const backgrounds = ['back1.jpg','back2.jpg','back3.jpg'];
+  let currentBackground = 0;
+
+  function render() {
+    boardEl.innerHTML = '';
+    board.forEach((value, i) => {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.dataset.index = i;
+
+      if (value === 'X') {
+        const block = document.createElement('div');
+        block.className = 'x-mark';
+        cell.appendChild(block);
+      } else if (value === 'O') {
+        const block = document.createElement('div');
+        block.className = 'o-mark';
+        cell.appendChild(block);
+      }
+
+      cell.onclick = () => handleClick(i);
+      boardEl.appendChild(cell);
+    });
+
+    if (playing) {
+      statusEl.textContent = `Turn: ${current}`;
+    }
+  }
+
+  function handleClick(i) {
+    if (!playing || board[i]) return;
+
+    board[i] = current;
+    const winner = checkWin();
+
+    if (winner) {
+      playing = false;
+      statusEl.textContent = `${winner} Wins!`;
+      render();
+      return;
+    }
+
+    if (board.every(cell => cell)) {
+      playing = false;
+      statusEl.textContent = 'Draw!';
+      render();
+      return;
+    }
+
+    current = current === 'X' ? 'O' : 'X';
+    render();
+  }
+
+  function checkWin() {
+    for (let line of wins) {
+      const [a,b,c] = line;
+      if (board[a] && board[a] === board[b] && board[b] === board[c]) {
+        return board[a];
+      }
+    }
+    return null;
+  }
+
+  function restart() {
+    board = Array(9).fill(null);
+    current = 'X';
+    playing = true;
+    statusEl.textContent = 'Turn: X';
+    render();
+  }
+
+  function toggleBackground() {
+    currentBackground = (currentBackground + 1) % backgrounds.length;
+    bodyEl.style.backgroundImage = `url('${backgrounds[currentBackground]}')`;
+  }
+
+  render();
+</script>
+
+</body>
+</html>

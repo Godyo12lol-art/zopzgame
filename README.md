@@ -1,2 +1,0 @@
-# zopzgame
-zopz the bum

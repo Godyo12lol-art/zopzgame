@@ -10,7 +10,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: url('back1.jpg'); /* default background */
+    background-image: url('back1.jpg');
     background-size: cover;
     background-position: center;
     font-family: Arial, sans-serif;
@@ -78,9 +78,7 @@
     font-size: 16px;
   }
 
-  button:hover {
-    background: #444;
-  }
+  button:hover { background: #444; }
 
   #status {
     margin-top: 10px;
@@ -114,6 +112,7 @@
     [0,4,8],[2,4,6]
   ];
 
+  // Images are now in same folder
   const backgrounds = ['back1.jpg','back2.jpg','back3.jpg'];
   let currentBackground = 0;
 
@@ -147,8 +146,8 @@
     if (!playing || board[i]) return;
 
     board[i] = current;
-
     const winner = checkWin();
+
     if (winner) {
       playing = false;
       statusEl.textContent = `${winner} Wins!`;

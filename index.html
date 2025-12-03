@@ -15,14 +15,13 @@
     background-position: center;
     font-family: Arial, sans-serif;
     color: white;
-    transition: background-image 0.3s ease;
   }
 
   .game {
     text-align: center;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.55);
     padding: 20px;
-    border-radius: 12px;
+    border-radius: 14px;
     backdrop-filter: blur(4px);
   }
 
@@ -37,34 +36,18 @@
   .cell {
     width: 120px;
     height: 120px;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.1);
     border-radius: 12px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    font-size: 80px;
+    font-size: 48px;
     font-weight: bold;
-    color: white;
-    transition: background 0.2s;
   }
 
   .cell:hover {
-    background: rgba(255,255,255,0.1);
-  }
-
-  .x-mark {
-    width: 70%;
-    height: 70%;
-    background: red;
-    border-radius: 6px;
-  }
-
-  .o-mark {
-    width: 70%;
-    height: 70%;
-    background: orange;
-    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
   }
 
   button {
@@ -85,6 +68,13 @@
     font-size: 20px;
     font-weight: bold;
   }
+
+  #credit {
+    margin-top: 10px;
+    font-size: 14px;
+    font-style: italic;
+    color: #ccc;
+  }
 </style>
 </head>
 <body>
@@ -95,6 +85,7 @@
   <div id="status">Turn: X</div>
   <button onclick="restart()">Restart</button>
   <button onclick="toggleBackground()">Toggle Background</button>
+  <div id="credit">by Clownz</div>
 </div>
 
 <script>
@@ -112,7 +103,6 @@
     [0,4,8],[2,4,6]
   ];
 
-  // Images are now in same folder
   const backgrounds = ['back1.jpg','back2.jpg','back3.jpg'];
   let currentBackground = 0;
 
@@ -124,13 +114,14 @@
       cell.dataset.index = i;
 
       if (value === 'X') {
-        const block = document.createElement('div');
-        block.className = 'x-mark';
-        cell.appendChild(block);
+        cell.style.color = 'red';
+        cell.textContent = 'X';
       } else if (value === 'O') {
-        const block = document.createElement('div');
-        block.className = 'o-mark';
-        cell.appendChild(block);
+        cell.style.color = 'blue';
+        cell.textContent = 'O';
+      } else {
+        cell.style.color = 'white';
+        cell.textContent = i+1;
       }
 
       cell.onclick = () => handleClick(i);
